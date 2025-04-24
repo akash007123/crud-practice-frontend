@@ -13,7 +13,6 @@ const App: React.FC = () => {
         <Container>
           <Navbar.Brand href="/">User Management</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="/">Users</Nav.Link>
             <Nav.Link href="/users/new">Add User</Nav.Link>
           </Nav>
         </Container>

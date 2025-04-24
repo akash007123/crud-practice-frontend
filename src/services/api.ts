@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { User, UserFormData } from '../types/User';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'https://learnnode-profilics.onrender.com/api';
 
 export const api = {
   getUsers: async (): Promise<User[]> => {
