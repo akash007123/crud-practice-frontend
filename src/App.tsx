@@ -15,7 +15,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 const AppContent = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   
   return (
     <>  
