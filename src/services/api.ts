@@ -3,10 +3,34 @@ import { User, UserFormData } from '../types/User';
 
 const API_BASE_URL = 'http://localhost:8000/api';
 
+
+//for sorting and searching
+interface GetUsersParams {
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  search?: string;
+  page?: number;
+  limit?: number;
+  gender?: string;
+  jobTitle?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+interface PaginatedResponse {
+  users: User[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalUsers: number;
+    usersPerPage: number;
+  };
+}
+
 export const api = {
-  getUsers: async (): Promise<User[]> => {
+  getUsers: async (params?: GetUsersParams): Promise<PaginatedResponse> => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/user`);
+      const response = await axios.get(`${API_BASE_URL}/user`, { params });
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
