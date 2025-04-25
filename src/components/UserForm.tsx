@@ -50,24 +50,21 @@ const UserForm: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Check file size (5MB limit)
       if (file.size > 5 * 1024 * 1024) {
         setError('File size must be less than 5MB');
         return;
       }
-      // Check file type
       if (!file.type.startsWith('image/')) {
         setError('Only image files are allowed');
         return;
       }
       setFormData(prev => ({ ...prev, profileImage: file }));
-      // Create preview URL
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewImage(reader.result as string);
       };
       reader.readAsDataURL(file);
-      setError(''); // Clear any previous errors
+      setError('');
     }
   };
 
@@ -91,108 +88,129 @@ const UserForm: React.FC = () => {
   };
 
   return (
-    <Container className="mt-4">
-      <h2>{id ? 'Edit User' : 'Add New User'}</h2>
-      {error && <Alert variant="danger">{error}</Alert>}
-      
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
-          <Form.Label>First Name</Form.Label>
-          <Form.Control
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Last Name</Form.Label>
-          <Form.Control
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Job Title</Form.Label>
-          <Form.Control
-            type="text"
-            name="jobTitle"
-            value={formData.jobTitle}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Gender</Form.Label>
-          <Form.Select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </Form.Select>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Profile Image</Form.Label>
-          <Form.Control
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-          <Form.Text className="text-muted">
-            Maximum file size: 5MB. Supported formats: JPG, PNG, GIF
-          </Form.Text>
-          {previewImage && (
-            <div className="mt-3">
-              <img
-                src={previewImage}
-                alt="Profile preview"
-                style={{ 
-                  maxWidth: '300px', 
-                  maxHeight: '300px',
-                  objectFit: 'cover',
-                  borderRadius: '8px',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                }}
-                className="img-thumbnail"
+    <Container className="py-8 px-4 max-w-4xl mx-auto">
+      <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          {id ? 'Edit User Profile' : 'Create New User Profile'}
+        </h2>
+        
+        {error && (
+          <Alert variant="danger" className="mb-6">
+            {error}
+          </Alert>
+        )}
+        
+        <Form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Form.Group className="mb-4">
+              <Form.Label className="text-sm font-medium text-gray-700">First Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
-            </div>
-          )}
-        </Form.Group>
+            </Form.Group>
 
-        <Button variant="primary" type="submit" disabled={loading}>
-          {loading ? 'Saving...' : 'Save'}
-        </Button>
-        <Button
-          variant="secondary"
-          className="ms-2"
-          onClick={() => navigate('/')}
-        >
-          Cancel
-        </Button>
-      </Form>
+            <Form.Group className="mb-4">
+              <Form.Label className="text-sm font-medium text-gray-700">Last Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </Form.Group>
+          </div>
+
+          <Form.Group className="mb-4">
+            <Form.Label className="text-sm font-medium text-gray-700">Email</Form.Label>
+            <Form.Control
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-4">
+            <Form.Label className="text-sm font-medium text-gray-700">Job Title</Form.Label>
+            <Form.Control
+              type="text"
+              name="jobTitle"
+              value={formData.jobTitle}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-4">
+            <Form.Label className="text-sm font-medium text-gray-700">Gender</Form.Label>
+            <Form.Select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </Form.Select>
+          </Form.Group>
+
+          <Form.Group className="mb-6">
+            <Form.Label className="text-sm font-medium text-gray-700">Profile Image</Form.Label>
+            <div className="mt-2 flex items-center space-x-4">
+              <div className="flex-1">
+                <Form.Control
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+                <Form.Text className="text-sm text-gray-500 mt-1">
+                  Maximum file size: 5MB. Supported formats: JPG, PNG, GIF
+                </Form.Text>
+              </div>
+              {previewImage && (
+                <div className="flex-shrink-0">
+                  <img
+                    src={previewImage}
+                    alt="Profile preview"
+                    className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+                  />
+                </div>
+              )}
+            </div>
+          </Form.Group>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-end">
+            <Button
+              variant="secondary"
+              onClick={() => navigate('/')}
+              className="w-full sm:w-auto px-6 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={loading}
+              className="w-full sm:w-auto px-6 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+            >
+              {loading ? 'Saving...' : 'Save Profile'}
+            </Button>
+          </div>
+        </Form>
+      </div>
     </Container>
   );
 };

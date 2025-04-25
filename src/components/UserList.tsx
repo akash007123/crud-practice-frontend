@@ -14,7 +14,6 @@ type SortField =
 type SortDirection = "asc" | "desc";
 
 export const UserList = () => {
-  // const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -29,6 +28,7 @@ export const UserList = () => {
   const [jobTitleFilter, setJobTitleFilter] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
   const usersPerPage = 5;
 
   // Debounce search term
@@ -114,18 +114,15 @@ export const UserList = () => {
 
   const renderPagination = () => {
     const items = [];
-    const maxPages = 5; // Maximum number of page buttons to show
+    const maxPages = 5;
 
-    // Calculate start and end page numbers
     let startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
     let endPage = Math.min(totalPages, startPage + maxPages - 1);
 
-    // Adjust start page if we're near the end
     if (endPage - startPage + 1 < maxPages) {
       startPage = Math.max(1, endPage - maxPages + 1);
     }
 
-    // First page button
     items.push(
       <Pagination.First
         key="first"
@@ -134,7 +131,6 @@ export const UserList = () => {
       />
     );
 
-    // Previous page button
     items.push(
       <Pagination.Prev
         key="prev"
@@ -143,7 +139,6 @@ export const UserList = () => {
       />
     );
 
-    // Page numbers
     for (let number = startPage; number <= endPage; number++) {
       items.push(
         <Pagination.Item
@@ -156,7 +151,6 @@ export const UserList = () => {
       );
     }
 
-    // Next page button
     items.push(
       <Pagination.Next
         key="next"
@@ -165,7 +159,6 @@ export const UserList = () => {
       />
     );
 
-    // Last page button
     items.push(
       <Pagination.Last
         key="last"
@@ -178,229 +171,301 @@ export const UserList = () => {
   };
 
   return (
-    <div className="mt-4 px-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
-        <h2 className="text-2xl font-semibold">Users List</h2>
-      </div>
+    <div className=" mx-auto px-4 py-8 " style={{backgroundColor:'#3DC1C9'}}>
+      <div
+        className=" rounded-lg shadow-lg p-6 mb-8"
+        style={{ backgroundColor: "#3DC1C9" }}
+      >
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+          <h2 className="text-2xl font-bold text-white mb-4 md:mb-0">
+            Users List
+          </h2>
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <div className="relative flex-grow">
+              <input
+                type="text"
+                placeholder="Search users..."
+                className="w-full pl-10 pr-4 py-2 border border-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-white"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
 
-      {error && (
-        <div className="bg-red-100 text-red-700 border border-red-400 p-3 rounded mb-4">
-          {error}
-        </div>
-      )}
-
-      {/* Filter by search*/}
-
-      
-
-      {/* Filter by gender, job title and date */}
-      <div className="bg-white p-4 rounded-lg shadow mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Gender
-            </label>
-            <select
-              className="w-full border border-gray-300 rounded px-3 py-2"
-              value={genderFilter}
-              onChange={(e) => setGenderFilter(e.target.value)}
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg
+                  className="h-5 w-5 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition flex items-center justify-center"
             >
-              <option value="">All Genders</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
+              <svg
+                className="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                />
+              </svg>
+              Filters
+            </button>
           </div>
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Job Title
-            </label>
-            <input
-              type="text"
-              placeholder="Filter by job title..."
-              className="w-full border border-gray-300 rounded px-3 py-2"
-              value={jobTitleFilter}
-              onChange={(e) => setJobTitleFilter(e.target.value)}
-            />
+        {error && (
+          <div className="bg-red-100 text-red-700 border border-red-400 p-4 rounded-lg mb-6">
+            {error}
           </div>
+        )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Date Range
-            </label>
-            <div className="flex gap-4 ">
-              <input
-                type="date"
-                className="w-full border border-gray-300 rounded px-3 py-2"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-              <input
-                type="date"
-                className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
+        {showFilters && (
+          <div className="bg-gray-50 p-4 rounded-lg mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Gender
+                </label>
+                <select
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  value={genderFilter}
+                  onChange={(e) => setGenderFilter(e.target.value)}
+                >
+                  <option value="">All Genders</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Job Title
+                </label>
+                <input
+                  type="text"
+                  placeholder="Filter by job title..."
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  value={jobTitleFilter}
+                  onChange={(e) => setJobTitleFilter(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Date Range
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="date"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                  <input
+                    type="date"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={clearFilters}
+                className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+              >
+                Clear Filters
+              </button>
             </div>
           </div>
-         
-        </div>
+        )}
 
-        <div className="flex justify-end mt-4">
-          <button
-            onClick={clearFilters}
-            className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition duration-200"
-          >
-            Clear Filters
-          </button>
-        </div>
-      </div>
-
-      {/* Search by any */}
-      <div className="flex justify-between mb-2">
-        <div className="mb-3 text-sm text-gray-500">
+        <div className="mb-4 text-sm text-white">
           Showing {users.length} of {totalUsers} users
         </div>
 
-        <div className="bg-white p-1 rounded-lg  justify-center items-center ">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Search
-            </label>{" "}
-            &nbsp;&nbsp;
-            <input
-              type="text"
-              placeholder="Search users..."
-              className="w-40 border border-gray-300 rounded px-3 py-2"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 border">
-          <thead className="bg-gray-100 text-left text-sm font-semibold text-gray-700">
-            <tr>
-              <th className="p-3">Profile</th>
-              <th
-                className="p-3 cursor-pointer"
-                onClick={() => handleSort("firstName")}
-              >
-                First Name{" "}
-                {sortField === "firstName" &&
-                  (sortDirection === "asc" ? "↑" : "↓")}
-              </th>
-              <th
-                className="p-3 cursor-pointer"
-                onClick={() => handleSort("lastName")}
-              >
-                Last Name{" "}
-                {sortField === "lastName" &&
-                  (sortDirection === "asc" ? "↑" : "↓")}
-              </th>
-              <th
-                className="p-3 cursor-pointer"
-                onClick={() => handleSort("email")}
-              >
-                Email{" "}
-                {sortField === "email" && (sortDirection === "asc" ? "↑" : "↓")}
-              </th>
-              <th
-                className="p-3 cursor-pointer"
-                onClick={() => handleSort("jobTitle")}
-              >
-                Job Title{" "}
-                {sortField === "jobTitle" &&
-                  (sortDirection === "asc" ? "↑" : "↓")}
-              </th>
-              <th
-                className="p-3 cursor-pointer"
-                onClick={() => handleSort("gender")}
-              >
-                Gender{" "}
-                {sortField === "gender" &&
-                  (sortDirection === "asc" ? "↑" : "↓")}
-              </th>
-              <th
-                className="p-3 cursor-pointer"
-                onClick={() => handleSort("createdAt")}
-              >
-                Created At{" "}
-                {sortField === "createdAt" &&
-                  (sortDirection === "asc" ? "↑" : "↓")}
-              </th>
-              <th className="p-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="text-sm divide-y divide-gray-200">
-            {loading ? (
+        <div className="overflow-x-auto rounded-lg border border-gray-200">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <td colSpan={8} className="text-center py-4">
-                  Loading...
-                </td>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Profile
+                </th>
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSort("firstName")}
+                >
+                  First Name{" "}
+                  {sortField === "firstName" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSort("lastName")}
+                >
+                  Last Name{" "}
+                  {sortField === "lastName" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSort("email")}
+                >
+                  Email{" "}
+                  {sortField === "email" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSort("jobTitle")}
+                >
+                  Job Title{" "}
+                  {sortField === "jobTitle" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSort("gender")}
+                >
+                  Gender{" "}
+                  {sortField === "gender" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSort("createdAt")}
+                >
+                  Created At{" "}
+                  {sortField === "createdAt" &&
+                    (sortDirection === "asc" ? "↑" : "↓")}
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
-            ) : users.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="text-center py-4">
-                  No users found
-                </td>
-              </tr>
-            ) : (
-              users.map((user) => (
-                <tr key={user._id}>
-                  <td className="p-3">
-                    {user.profileImage ? (
-                      <img
-                        src={user.profileImage}
-                        alt={`${user.firstName}'s profile`}
-                        className="rounded shadow w-[100px] h-[100px] object-cover"
-                      />
-                    ) : (
-                      <div className="flex items-center justify-center bg-gray-100 text-gray-500 rounded w-[100px] h-[100px] text-xs">
-                        No Image
-                      </div>
-                    )}
-                  </td>
-                  <td className="p-3">{user.firstName}</td>
-                  <td className="p-3">{user.lastName}</td>
-                  <td className="p-3">{user.email}</td>
-                  <td className="p-3">{user.jobTitle}</td>
-                  <td className="p-3">{user.gender}</td>
-                  <td className="p-3">
-                    {new Date(user.createdAt!).toLocaleDateString()}
-                  </td>
-                  <td className="p-3">
-                    <div className="flex flex-col md:flex-row gap-2">
-                      <Link
-                        to={`/users/edit/${user._id}`}
-                        className="bg-blue-500 text-white text-sm px-3 py-1 rounded hover:bg-blue-600"
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {loading ? (
+                <tr>
+                  <td colSpan={8} className="px-6 py-4 text-center">
+                    <div className="flex justify-center items-center">
+                      <svg
+                        className="animate-spin h-8 w-8 text-blue-500"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
                       >
-                        Edit
-                      </Link>
-                      <button
-                        className="bg-red-500 text-white text-sm px-3 py-1 rounded hover:bg-red-600"
-                        onClick={() => user._id && handleDelete(user._id)}
-                      >
-                        Delete
-                      </button>
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
                     </div>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {totalPages > 1 && (
-        <div className="flex justify-center mt-4">
-          {/* Replace this with your custom pagination component or Tailwind pagination */}
-          {renderPagination()}
+              ) : users.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={8}
+                    className="px-6 py-4 text-center text-gray-500"
+                  >
+                    No users found
+                  </td>
+                </tr>
+              ) : (
+                users.map((user) => (
+                  <tr key={user._id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {user.profileImage ? (
+                        <img
+                          src={user.profileImage}
+                          alt={`${user.firstName}'s profile`}
+                          className="h-12 w-12 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
+                          <span className="text-gray-500 text-xs">
+                            No Image
+                          </span>
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {user.firstName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {user.lastName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {user.email}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {user.jobTitle}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {user.gender}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {new Date(user.createdAt!).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex space-x-2">
+                        <Link
+                          to={`/users/edit/${user._id}`}
+                          className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-600 transition"
+                        >
+                          Edit
+                        </Link>
+                        <button
+                          className="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600 transition"
+                          onClick={() => user._id && handleDelete(user._id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
+
+        {totalPages > 1 && (
+          <div className="flex justify-center mt-6">
+            <Pagination className="flex space-x-1">
+              {renderPagination()}
+            </Pagination>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
