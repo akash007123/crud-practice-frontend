@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Table, Button, Container } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Table, Button, Container, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { User } from '../types/User';
 import { api } from '../services/api';
@@ -52,6 +52,7 @@ export const UserList = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
+            <th>Profile</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
@@ -63,6 +64,37 @@ export const UserList = () => {
         <tbody>
           {users.map((user) => (
             <tr key={user._id}>
+              <td>
+                {user.profileImage ? (
+                  <img
+                    src={user.profileImage}
+                    alt={`${user.firstName}'s profile`}
+                    style={{ 
+                      width: '100px', 
+                      height: '100px', 
+                      objectFit: 'cover',
+                      borderRadius: '8px',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: '100px',
+                      height: '100px',
+                      backgroundColor: '#f0f0f0',
+                      borderRadius: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#666',
+                      fontSize: '14px'
+                    }}
+                  >
+                    No Image
+                  </div>
+                )}
+              </td>
               <td>{user.firstName}</td>
               <td>{user.lastName}</td>
               <td>{user.email}</td>
