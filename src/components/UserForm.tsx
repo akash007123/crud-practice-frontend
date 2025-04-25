@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import { api } from '../services/api';
-import { UserFormData, User } from '../types/User';
+import { UserFormData } from '../types/User';
 
 const UserForm: React.FC = () => {
   const navigate = useNavigate();

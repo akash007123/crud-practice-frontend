@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Button, Container, Alert } from 'react-bootstrap';
+import  { useEffect, useState } from 'react';
+import { Table, Button, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { User } from '../types/User';
 import { api } from '../services/api';
