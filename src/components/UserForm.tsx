@@ -79,7 +79,7 @@ const UserForm: React.FC = () => {
       } else {
         await api.createUser(formData);
       }
-      navigate('/');
+      navigate('/userlist');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save user');
     } finally {
