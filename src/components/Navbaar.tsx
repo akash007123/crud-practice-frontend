@@ -24,17 +24,17 @@ const Navbaar = () => {
           </div>
           
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-4 gap-2" >
             <button
               onClick={() => navigate('/userlist')}
-              className="text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium transition duration-200" 
+              className="text-white hover:bg-blue-700 px-4 button-style py-2 rounded-md text-sm font-medium transition duration-200" 
               style={{backgroundColor:'#3DC1C9'}}
             >
               View Users
             </button>
             <button
               onClick={() => navigate('/users/new')}
-              className="bg-gray-700 text-white hover:bg-gray-800 px-4 py-2 rounded-md text-sm font-medium transition duration-200"
+              className="bg-gray-700 text-white button-style hover:bg-gray-800 px-4 py-2 rounded-md text-sm font-medium transition duration-200"
             >
               Add New User
             </button>

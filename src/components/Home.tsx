@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "../App.css";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -21,13 +22,13 @@ const Home: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4 mt-6">
               <button
                 onClick={() => navigate("/userlist")}
-                className=" text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700 transition shadow-md" style={{backgroundColor:'#3DC1C9'}}
+                className=" text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700 transition shadow-md button-style" style={{backgroundColor:'#3DC1C9'}}
               >
                 View User List
               </button>
               <button
                 onClick={() => navigate("/users/new")}
-                className="bg-gray-700 text-white px-6 py-3 rounded-lg text-lg hover:bg-gray-800 transition shadow-md"
+                className="bg-gray-700 text-white px-6 py-3 rounded-lg text-lg hover:bg-gray-800 transition shadow-md button-style"
               >
                 Add New User
               </button>
