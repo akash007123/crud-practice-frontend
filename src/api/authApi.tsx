@@ -1,6 +1,6 @@
 import { LoginRequest, LoginResponse, SignupRequest, SignupResponse } from "./authTypes";
 
-const API_BASE = "http://localhost:8000/auth";
+const API_BASE = "https://dataset-api-7n51.onrender.com/auth";
 
 export async function login(data: LoginRequest): Promise<LoginResponse> {
   const res = await fetch(`${API_BASE}/login`, {

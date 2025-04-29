@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { User, UserFormData } from '../types/User';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'https://dataset-api-7n51.onrender.com/api';
 
 
 //for sorting and searching

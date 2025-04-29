@@ -4,9 +4,7 @@ import {
   Routes,
   Route,
   Navigate,
-  // useNavigate
 } from "react-router-dom";
-// import { Container, Navbar, Nav } from "react-bootstrap";
 import Home from "./components/Home";
 import Navbaar from "./components/Navbaar";
 import { UserList } from "./components/UserList";
@@ -16,43 +14,46 @@ import Signup from "./components/Signup";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 const AppContent = () => {
-  // const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   
   return (
     <>  
       <Navbaar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/userlist" element={
-          <ProtectedRoute>
-            <UserList />
-          </ProtectedRoute>
-        } />
-        <Route path="/users/new" element={
-          <ProtectedRoute>
-            <UserForm />
-          </ProtectedRoute>
-        } />
-        <Route path="/users/edit/:id" element={
-          <ProtectedRoute>
-            <UserForm />
-          </ProtectedRoute>
-        } />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <div className="container mt-4">
+        <Routes>
+          {/* Public routes */}
+          <Route element={<PublicRoute isAuthenticated={isAuthenticated} />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Route>
+          
+          {/* Protected routes */}
+          <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/userlist" element={<UserList />} />
+            <Route path="/users/new" element={<UserForm />} />
+            <Route path="/users/edit/:id" element={<UserForm />} />
+          </Route>
+          
+          {/* Catch all route */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
     </>
   );
 };
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </AuthProvider>
   );
 };
 

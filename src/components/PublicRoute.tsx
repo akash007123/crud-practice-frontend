@@ -1,19 +1,19 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
-interface ProtectedRouteProps {
+interface PublicRouteProps {
   isAuthenticated: boolean;
   redirectPath?: string;
 }
 
-const ProtectedRoute = ({ 
+const PublicRoute = ({ 
   isAuthenticated, 
-  redirectPath = '/login' 
-}: ProtectedRouteProps) => {
-  if (!isAuthenticated) {
+  redirectPath = '/' 
+}: PublicRouteProps) => {
+  if (isAuthenticated) {
     return <Navigate to={redirectPath} replace />;
   }
 
   return <Outlet />;
 };
 
-export default ProtectedRoute;
+export default PublicRoute; 
